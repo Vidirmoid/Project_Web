@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Information Portal: Insomnia & Sleep Health</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cream: #F7F3EC;
+      --paper: #FBF8F3;
+      --sand: #EDE5D8;
+      --blue: #6B8BA4;
+      --blue-ink: #4A6A83;
+      --sage: #9DB5A0;
+      --sage-ink: #4F7A5B;
+      --sage-tint: rgba(157, 181, 160, 0.2);
+      --peach: #E8B89A;
+      --peach-soft: #F4DCCB;
+      --peach-ink: #A9643F;
+      --ink: #2F3A45;
+      --muted: #5B6773;
+      --line: rgba(107, 139, 164, 0.22);
+      --shadow: 0 1px 2px rgba(47, 58, 69, 0.04), 0 14px 34px -16px rgba(47, 58, 69, 0.22);
+      --shadow-lift: 0 2px 4px rgba(47, 58, 69, 0.05), 0 22px 40px -18px rgba(47, 58, 69, 0.3);
+      --serif: 'Fraunces', Georgia, serif;
+      --sans: 'Nunito', system-ui, sans-serif;
+    }
+
+    * { padding: 0; margin: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background:
+        radial-gradient(ellipse 60% 40% at 85% 0%, rgba(244, 220, 203, 0.55), transparent 70%),
+        radial-gradient(ellipse 50% 35% at 10% 60%, rgba(157, 181, 160, 0.16), transparent 70%),
+        var(--cream);
+      background-attachment: fixed;
+      color: var(--ink);
+      line-height: 1.8;
+      font-size: 1.05rem;
+      overflow-x: hidden;
+      display: flex;
+    }
+
+    /* paper grain */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      pointer-events: none;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.18 0 0 0 0 0.23 0 0 0 0 0.27 0 0 0 0.07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+
+    .icon {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: none;
+    }
+
+    /* ---------- Sidebar ---------- */
+    aside.sidebar-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      z-index: 1000;
+      background: var(--paper);
+      border-right: 1px solid var(--line);
+      padding: 2.75rem 1.75rem 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-title {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.35rem;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .sidebar-title .icon { color: var(--peach-ink); }
+
+    .sidebar-wave {
+      display: block;
+      width: 100%;
+      height: 14px;
+      margin-bottom: 2rem;
+      fill: none;
+      stroke: var(--sage);
+      stroke-width: 1.5;
+    }
+
+    ol.doc-menu {
+      list-style: none;
+      counter-reset: doc;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    ol.doc-menu li { counter-increment: doc; }
+
+    ol.doc-menu li a {
+      display: flex;
+      align-items: baseline;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.55rem 0.8rem;
+      border-radius: 10px;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    }
+
+    ol.doc-menu li a::before {
+      content: counter(doc, decimal-leading-zero);
+      font-family: var(--serif);
+      font-size: 0.85rem;
+      color: var(--peach-ink);
+      font-weight: 500;
+    }
+
+    ol.doc-menu li a:hover {
+      color: var(--ink);
+      background: var(--sage-tint);
+      transform: translateX(4px);
+    }
+
+    ol.doc-menu li a:focus-visible {
+      outline: 2px solid var(--blue-ink);
+      outline-offset: 2px;
+    }
+
+    .sidebar-art {
+      margin-top: auto;
+      color: var(--blue);
+      opacity: 0.85;
+    }
+
+    .sidebar-art svg { width: 100%; height: auto; display: block; }
+
+    .sidebar-art .tw { animation: twinkle 4s ease-in-out infinite; }
+    .sidebar-art .tw:nth-of-type(2) { animation-delay: 1.3s; }
+    .sidebar-art .tw:nth-of-type(3) { animation-delay: 2.6s; }
+
+    .sidebar-art p {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 1; }
+    }
+
+    /* ---------- Layout ---------- */
+    .main-wrapper {
+      margin-left: 280px;
+      width: calc(100% - 280px);
+      position: relative;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero-video-section {
+      position: relative;
+      width: 100%;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 6rem clamp(1.5rem, 6vw, 5rem) 9rem;
+      background: linear-gradient(165deg, #4A6A83 0%, #6B8BA4 55%, #C9A58E 100%);
+    }
+
+    .bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      will-change: transform;
+      transform: translateY(0px) scale(1.1);
+      transition: transform 0.1s linear;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(180deg, rgba(47, 58, 69, 0.55) 0%, rgba(74, 106, 131, 0.42) 55%, rgba(201, 165, 142, 0.5) 100%);
+    }
+
+    .hero-cloud {
+      position: absolute;
+      z-index: 2;
+      fill: rgba(251, 248, 243, 0.16);
+      pointer-events: none;
+      animation: drift 60s linear infinite;
+    }
+
+    .hero-cloud.c1 { width: 260px; top: 14%; left: -280px; }
+    .hero-cloud.c2 { width: 180px; top: 62%; left: -200px; animation-duration: 85s; animation-delay: -30s; fill: rgba(251, 248, 243, 0.12); }
+
+    @keyframes drift {
+      from { transform: translateX(0); }
+      to { transform: translateX(calc(100vw + 300px)); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 720px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--peach-soft);
+      margin-bottom: 1.2rem;
+    }
+
+    .eyebrow .icon { width: 16px; height: 16px; }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 500;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.4rem;
+      color: var(--paper);
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--peach-soft);
+      font-weight: 400;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: rgba(251, 248, 243, 0.9);
+      margin-bottom: 2.2rem;
+      max-width: 560px;
+    }
+
+    .video-controls-box {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(251, 248, 243, 0.94);
+      color: var(--ink);
+      padding: 0.6rem 0.6rem 0.6rem 1.3rem;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      box-shadow: var(--shadow);
+    }
+
+    .custom-file-upload {
+      background: var(--peach);
+      color: var(--ink);
+      padding: 0.45rem 1.1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .custom-file-upload:hover {
+      background: #EFC6AC;
+      transform: translateY(-1px);
+    }
+
+    input[type="file"] { display: none; }
+
+    .hero-wave {
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 100%;
+      height: 110px;
+      z-index: 3;
+      display: block;
+    }
+
+    /* ---------- Content ---------- */
+    .info-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 3rem clamp(1.25rem, 4vw, 2.5rem) 5rem;
+      position: relative;
+      z-index: 3;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(1.75rem, 3vw, 2.3rem);
+      font-weight: 500;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .icon-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      background: var(--sage-tint);
+      color: var(--sage-ink);
+      flex: none;
+    }
+
+    .icon-badge.peach { background: rgba(232, 184, 154, 0.3); color: var(--peach-ink); }
+    .icon-badge.blue { background: rgba(107, 139, 164, 0.16); color: var(--blue-ink); }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .lead {
+      font-size: 1.15rem;
+      color: var(--ink);
+      max-width: 640px;
+    }
+
+    .stat-callout {
+      position: relative;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 2rem 1.8rem 1.8rem;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .stat-callout::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232, 184, 154, 0.45), transparent 70%);
+    }
+
+    .stat-number {
+      font-family: var(--serif);
+      font-size: clamp(3.4rem, 6vw, 4.5rem);
+      line-height: 1;
+      font-weight: 500;
+      color: var(--peach-ink);
+      letter-spacing: -0.03em;
+    }
+
+    .stat-number small {
+      font-size: 0.45em;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--muted);
+      margin: 0 0.15em;
+    }
+
+    .stat-text {
+      margin-top: 0.8rem;
+      color: var(--muted);
+      font-size: 0.98rem;
+      position: relative;
+    }
+
+    /* divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 4.5rem 0;
+      color: var(--sage);
+    }
+
+    .divider .wave {
+      flex: 1;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    .divider .moon {
+      width: 22px;
+      height: 22px;
+      fill: var(--peach-soft);
+      stroke: var(--peach-ink);
+      stroke-width: 1.4;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.75rem;
+    }
+
+    .card-info {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 2rem 1.8rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+      scroll-margin-top: 2rem;
+    }
+
+    .card-info:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lift);
+      border-color: rgba(157, 181, 160, 0.6);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-info h3 {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .card-info p { color: var(--muted); font-size: 1rem; }
+
+    .card-info ul {
+      list-style: none;
+      margin-top: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .card-info li {
+      position: relative;
+      padding-left: 1.5rem;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .card-info li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 9px;
+      height: 9px;
+      background: var(--sage);
+      clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+    }
+
+    .card-info li strong { color: var(--ink); font-weight: 700; }
+
+    /* ---------- Survey ---------- */
+    .survey-section,
+    .links-section {
+      position: relative;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: clamp(2rem, 4vw, 3rem);
+      box-shadow: var(--shadow);
+      scroll-margin-top: 2rem;
+    }
+
+    .section-intro { color: var(--muted); max-width: 640px; }
+
+    .chart-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 3rem;
+      margin-top: 2.2rem;
+    }
+
+    .donut-chart-wrapper {
+      position: relative;
+      width: 240px;
+      height: 240px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: none;
+    }
+
+    .donut-chart-wrapper svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .donut-chart-wrapper circle {
+      fill: transparent;
+      stroke-width: 26;
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+      transition: stroke-dashoffset 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .donut-chart-wrapper circle.track {
+      stroke: var(--sand);
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+
+    .chart-center-text {
+      position: absolute;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .chart-center-text .number {
+      font-family: var(--serif);
+      font-size: 2.6rem;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .chart-center-text .label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 700;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-size: 1rem;
+      color: var(--muted);
+      padding: 0.7rem 1rem;
+      border-radius: 12px;
+      background: var(--cream);
+    }
+
+    .legend-item strong { color: var(--ink); }
+
+    .legend-color {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex: none;
+    }
+
+    .top-responses { margin-top: 3rem; }
+
+    .top-responses h3 {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 1.3rem;
+    }
+
+    .responses-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .response-card {
+      position: relative;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      padding: 2.6rem 1.4rem 1.3rem;
+      border-radius: 14px;
+    }
+
+    .response-card::before {
+      content: "\201C";
+      position: absolute;
+      top: 0.2rem;
+      left: 1.1rem;
+      font-family: var(--serif);
+      font-size: 3.6rem;
+      line-height: 1;
+      color: var(--peach);
+    }
+
+    .response-card p {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--ink);
+      font-size: 1.02rem;
+      line-height: 1.6;
+    }
+
+    .response-card span {
+      display: block;
+      margin-top: 0.9rem;
+      font-size: 0.8rem;
+      color: var(--sage-ink);
+      font-weight: 700;
+    }
+
+    /* ---------- Links ---------- */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.8rem;
+    }
+
+    .external-link-card {
+      position: relative;
+      display: block;
+      text-decoration: none;
+      background: var(--cream);
+      padding: 1.4rem 1.3rem;
+      border-radius: 14px;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    .external-link-card strong {
+      font-family: var(--serif);
+      font-size: 1.12rem;
+      font-weight: 500;
+      padding-right: 1.6rem;
+      display: block;
+    }
+
+    .external-link-card .link-icon {
+      position: absolute;
+      top: 1.3rem;
+      right: 1.2rem;
+      width: 18px;
+      height: 18px;
+      color: var(--blue);
+      transition: transform 0.35s ease;
+    }
+
+    .external-link-card:hover {
+      border-color: var(--sage);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lift);
+    }
+
+    .external-link-card:hover .link-icon { transform: translate(2px, -2px); }
+
+    .external-link-card:focus-visible {
+      outline: 2px solid var(--blue-ink);
+      outline-offset: 3px;
+    }
+
+    .external-link-card span {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--blue-ink);
+      margin-top: 0.7rem;
+      font-weight: 700;
+    }
+
+    /* ---------- CTA ---------- */
+    .test-cta {
+      margin-top: 4.5rem;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(130deg, var(--peach-soft) 0%, #F3E7DA 45%, #E3ECE3 100%);
+      border: 1px solid rgba(232, 184, 154, 0.55);
+      border-radius: 22px;
+      padding: clamp(2.2rem, 5vw, 3.5rem);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .cta-art {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.5rem;
+      width: 150px;
+      color: var(--blue);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .cta-art .cloud { fill: rgba(251, 248, 243, 0.9); stroke: none; animation: bob 7s ease-in-out infinite; }
+
+    @keyframes bob {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(8px); }
+    }
+
+    .test-cta h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.7rem, 3vw, 2.2rem);
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.7rem;
+      position: relative;
+    }
+
+    .test-cta p {
+      color: var(--ink);
+      max-width: 560px;
+      margin-bottom: 1.4rem;
+      position: relative;
+    }
+
+    .test-cta .cta-meta {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .test-cta .cta-meta span {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--sage-ink);
+      background: rgba(251, 248, 243, 0.8);
+      border: 1px solid rgba(157, 181, 160, 0.5);
+      padding: 0.25rem 0.9rem;
+      border-radius: 999px;
+    }
+
+    .test-cta a.cta-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      background: var(--ink);
+      color: var(--paper);
+      font-weight: 700;
+      padding: 1rem 2rem;
+      border-radius: 999px;
+      transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+      animation: ctaPulse 3.2s ease-out infinite;
+      white-space: nowrap;
+    }
+
+    .test-cta a.cta-btn:hover {
+      transform: translateY(-3px);
+      background: var(--blue-ink);
+      box-shadow: var(--shadow-lift);
+    }
+
+    .test-cta a.cta-btn:focus-visible {
+      outline: 2px solid var(--peach-ink);
+      outline-offset: 3px;
+    }
+
+    @keyframes ctaPulse {
+      0% { box-shadow: 0 0 0 0 rgba(232, 184, 154, 0.7); }
+      100% { box-shadow: 0 0 0 18px rgba(232, 184, 154, 0); }
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      position: relative;
+      z-index: 3;
+      background: var(--sand);
+      text-align: center;
+      padding: 1rem 2rem 2.2rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+
+    .footer-wave {
+      position: absolute;
+      left: 0;
+      top: -39px;
+      width: 100%;
+      height: 40px;
+      display: block;
+      fill: var(--sand);
+    }
+
+    .footer-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+    }
+
+    .footer-mark .icon { color: var(--peach-ink); width: 18px; height: 18px; }
+
+    /* ---------- Reveal ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+
+      aside.sidebar-nav {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+        padding: 1.5rem 1.25rem 1.25rem;
+      }
+
+      .sidebar-wave { margin-bottom: 1rem; }
+
+      ol.doc-menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      ol.doc-menu li a {
+        padding: 0.4rem 0.8rem;
+        background: var(--cream);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        font-size: 0.9rem;
+      }
+
+      ol.doc-menu li a:hover { transform: none; }
+
+      .sidebar-art { display: none; }
+
+      .main-wrapper { margin-left: 0; width: 100%; }
+
+      .hero-video-section { min-height: 80vh; padding-top: 4rem; }
+
+      .intro-grid { grid-template-columns: 1fr; gap: 2rem; }
+
+      .test-cta { grid-template-columns: 1fr; }
+      .cta-art { width: 100px; opacity: 0.35; }
+    }
+
+    @media (max-width: 520px) {
+      .video-controls-box {
+        border-radius: 18px;
+        padding: 0.9rem 1rem;
+      }
+      .donut-chart-wrapper { width: 200px; height: 200px; margin: 0 auto; }
+      .chart-container { justify-content: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar-nav">
+    <div class="sidebar-title">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+      Docs Index
+    </div>
+    <svg class="sidebar-wave" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path vector-effect="non-scaling-stroke" d="M0 7 C 17 1, 33 1, 50 7 S 83 13, 100 7 S 133 1, 150 7 S 183 13, 200 7"/></svg>
+    <ol class="doc-menu">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#definition">Overview</a></li>
+      <li><a href="#causes">Causes</a></li>
+      <li><a href="#symptoms">Symptoms</a></li>
+      <li><a href="#survey">Survey Data</a></li>
+      <li><a href="#resources">Medical Resources</a></li>
+      <li><a href="encuesta.html">Insomnia Test</a></li>
+    </ol>
+
+    <div class="sidebar-art" aria-hidden="true">
+      <svg viewBox="0 0 220 110">
+        <path d="M150 70a32 32 0 1 1-30-50 26 26 0 0 0 30 50Z" fill="#F4DCCB" stroke="#A9643F" stroke-width="1.4"/>
+        <path class="tw" d="M40 30c.5 3.5 1.6 4.6 5 5-3.4.5-4.5 1.6-5 5-.5-3.4-1.6-4.5-5-5 3.4-.4 4.5-1.5 5-5Z" fill="#6B8BA4"/>
+        <path class="tw" d="M185 20c.4 2.6 1.2 3.4 3.8 3.8-2.6.4-3.4 1.2-3.8 3.8-.4-2.6-1.2-3.4-3.8-3.8 2.6-.4 3.4-1.2 3.8-3.8Z" fill="#6B8BA4"/>
+        <path class="tw" d="M75 70c.4 2.6 1.2 3.4 3.8 3.8-2.6.4-3.4 1.2-3.8 3.8-.4-2.6-1.2-3.4-3.8-3.8 2.6-.4 3.4-1.2 3.8-3.8Z" fill="#9DB5A0"/>
+        <path d="M0 98 C 37 90, 73 90, 110 98 S 183 106, 220 98" fill="none" stroke="#9DB5A0" stroke-width="1.5"/>
+      </svg>
+      <p>Rest is a skill, not a luxury.</p>
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+
+    <section id="home" class="hero-video-section">
+      <video id="bgVideo" class="bg-video" autoplay loop muted playsinline>
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-over-a-silent-lake-41559-large.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+      </video>
+      <div class="video-overlay"></div>
+
+      <svg class="hero-cloud c1" viewBox="0 0 120 50" aria-hidden="true"><path d="M20 46h78a18 18 0 0 0 2-35.9A26 26 0 0 0 52 8a20 20 0 0 0-32 16 11 11 0 0 0 0 22Z"/></svg>
+      <svg class="hero-cloud c2" viewBox="0 0 120 50" aria-hidden="true"><path d="M20 46h78a18 18 0 0 0 2-35.9A26 26 0 0 0 52 8a20 20 0 0 0-32 16 11 11 0 0 0 0 22Z"/></svg>
+
+      <div class="hero-content reveal">
+        <span class="eyebrow">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c.6 4 1.9 5.4 6 6-4.1.6-5.4 2-6 6-.6-4-1.9-5.4-6-6 4.1-.6 5.4-2 6-6Z"/></svg>
+          Sleep health guide
+        </span>
+        <h1 class="hero-title">Sleep Disorders <em>&amp;</em> Insomnia</h1>
+        <p class="hero-subtitle">A comprehensive scientific overview of the causes, effects, and sleep hygiene practices for restorative rest.</p>
+
+        <div class="video-controls-box">
+          <span>Want to change the background video?</span>
+          <label for="videoInput" class="custom-file-upload">Upload local video</label>
+          <input type="file" id="videoInput" accept="video/*">
+        </div>
+      </div>
+
+      <svg class="hero-wave" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 50 C 240 100 480 10 720 44 S 1200 104 1440 34 V110 H0Z" fill="#F7F3EC" opacity="0.45"/>
+        <path d="M0 70 C 260 110 520 30 760 62 S 1220 112 1440 58 V110 H0Z" fill="#F7F3EC"/>
+      </svg>
+    </section>
+
+    <main class="info-container">
+
+      <section id="definition" class="reveal" style="scroll-margin-top: 2rem;">
+        <div class="intro-grid">
+          <div>
+            <h2 class="section-title">
+              <span class="icon-badge blue"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></span>
+              What is Insomnia?
+            </h2>
+            <p class="lead">
+              Insomnia is a common sleep disorder that can make it hard to fall asleep, hard to stay asleep, or cause you to wake up too early and not be able to get back to sleep. It can drain your energy level and drastically affect your mood, health, and performance at work or school.
+            </p>
+          </div>
+          <aside class="stat-callout" aria-label="Survey highlight">
+            <div class="stat-number">1<small>in</small>3</div>
+            <p class="stat-text">people in our survey group of 15 reported living with chronic insomnia.</p>
+          </aside>
+        </div>
+      </section>
+
+      <div class="divider" aria-hidden="true">
+        <svg class="wave" viewBox="0 0 600 16" preserveAspectRatio="none"><path vector-effect="non-scaling-stroke" d="M0 8 C 50 0, 100 0, 150 8 S 250 16, 300 8 S 400 0, 450 8 S 550 16, 600 8"/></svg>
+        <svg class="moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+        <svg class="wave" viewBox="0 0 600 16" preserveAspectRatio="none"><path vector-effect="non-scaling-stroke" d="M0 8 C 50 0, 100 0, 150 8 S 250 16, 300 8 S 400 0, 450 8 S 550 16, 600 8"/></svg>
+      </div>
+
+      <div class="grid-layout">
+
+        <div id="causes" class="card-info reveal">
+          <div class="card-head">
+            <span class="icon-badge peach"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6l1-7Z"/></svg></span>
+            <h3>Common Causes</h3>
+          </div>
+          <p>Habitual causes of chronic insomnia include:</p>
+          <ul>
+            <li><strong>Stress:</strong> Concerns about work, school, health, or finances.</li>
+            <li><strong>Poor Sleep Habits:</strong> Irregular schedules, screen usage right before bed.</li>
+            <li><strong>Travel or Work Schedules:</strong> Disruptions to your circadian rhythm.</li>
+            <li><strong>Substance Use:</strong> Caffeine, nicotine, or alcohol late in the day.</li>
+          </ul>
+        </div>
+
+        <div id="symptoms" class="card-info reveal">
+          <div class="card-head">
+            <span class="icon-badge"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11c2.5 3 5.5 4.5 9 4.5s6.5-1.5 9-4.5"/><path d="M7 14.5 6 17M12 15.5V18M17 14.5l1 2.5"/></svg></span>
+            <h3>Frequent Symptoms</h3>
+          </div>
+          <p>People suffering from insomnia may experience:</p>
+          <ul>
+            <li>Difficulty falling asleep at night.</li>
+            <li>Waking up during the night or waking up too early.</li>
+            <li>Not feeling well-rested after a night's sleep.</li>
+            <li>Daytime tiredness, sleepiness, irritability, or anxiety.</li>
+          </ul>
+        </div>
+
+        <div class="card-info reveal">
+          <div class="card-head">
+            <span class="icon-badge blue"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+            <h3>Types of Insomnia</h3>
+          </div>
+          <p>It is mainly categorized based on its duration:</p>
+          <ul>
+            <li><strong>Acute (Short-term):</strong> Lasts for days or weeks, often caused by stress or traumatic events.</li>
+            <li><strong>Chronic:</strong> Occurs at least 3 nights a week for 3 months or longer without a direct apparent medical cause.</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="divider" aria-hidden="true">
+        <svg class="wave" viewBox="0 0 600 16" preserveAspectRatio="none"><path vector-effect="non-scaling-stroke" d="M0 8 C 50 0, 100 0, 150 8 S 250 16, 300 8 S 400 0, 450 8 S 550 16, 600 8"/></svg>
+        <svg class="moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+        <svg class="wave" viewBox="0 0 600 16" preserveAspectRatio="none"><path vector-effect="non-scaling-stroke" d="M0 8 C 50 0, 100 0, 150 8 S 250 16, 300 8 S 400 0, 450 8 S 550 16, 600 8"/></svg>
+      </div>
+
+      <section id="survey" class="survey-section reveal">
+        <h2 class="section-title">
+          <span class="icon-badge peach"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9h-9Z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15Z"/></svg></span>
+          Field Survey Results
+        </h2>
+        <p class="section-intro">Statistical breakdown gathered from a study group sample of 15 individuals regarding their current sleep conditions:</p>
+
+        <div class="chart-container">
+          <div class="donut-chart-wrapper">
+            <svg viewBox="0 0 180 180" role="img" aria-label="Donut chart: 5 chronic insomnia, 4 developing symptoms, 6 no symptoms">
+              <circle class="track" cx="90" cy="90" r="70" />
+              <circle id="slice3" cx="90" cy="90" r="70" stroke="#9DB5A0" />
+              <circle id="slice2" cx="90" cy="90" r="70" stroke="#E8B89A" />
+              <circle id="slice1" cx="90" cy="90" r="70" stroke="#6B8BA4" />
+            </svg>
+            <div class="chart-center-text">
+              <div class="number">15</div>
+              <div class="label">People</div>
+            </div>
+          </div>
+
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-color" style="background: #6B8BA4;"></div>
+              <span><strong>5 People (33.3%):</strong> Suffers Chronic Insomnia</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background: #E8B89A;"></div>
+              <span><strong>4 People (26.7%):</strong> Developing Symptoms</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background: #9DB5A0;"></div>
+              <span><strong>6 People (40.0%):</strong> No Insomnia Symptoms</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="top-responses">
+          <h3>Top 3 Key Insights from Interviews</h3>
+          <div class="responses-list">
+            <div class="response-card">
+              <p>I spend at least two hours in bed scrolling on my phone before trying to sleep, which makes my mind race.</p>
+              <span>— Top Response #1 (Pre-sleep screen exposure)</span>
+            </div>
+            <div class="response-card">
+              <p>Academic and work deadlines keep me up thinking about everything I have to do tomorrow morning.</p>
+              <span>— Top Response #2 (Stress and anticipatory anxiety)</span>
+            </div>
+            <div class="response-card">
+              <p>I drink coffee or energy drinks late in the afternoon to finish my daily tasks, but then I can't turn off.</p>
+              <span>— Top Response #3 (Late-day stimulant intake)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider" aria-hidden="true">
+        <svg class="wave" viewBox="0 0 600 16" preserveAspectRatio="none"><path vector-effect="non-scaling-stroke" d="M0 8 C 50 0, 100 0, 150 8 S 250 16, 300 8 S 400 0, 450 8 S 550 16, 600 8"/></svg>
+        <svg class="moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+        <svg class="wave" viewBox="0 0 600 16" preserveAspectRatio="none"><path vector-effect="non-scaling-stroke" d="M0 8 C 50 0, 100 0, 150 8 S 250 16, 300 8 S 400 0, 450 8 S 550 16, 600 8"/></svg>
+      </div>
+
+      <section id="resources" class="links-section reveal">
+        <h2 class="section-title">
+          <span class="icon-badge"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v14H6.5A1.5 1.5 0 0 0 5 18.5v-14Z"/><path d="M5 18.5A1.5 1.5 0 0 0 6.5 20H19"/></svg></span>
+          Medical Sources &amp; Useful Links
+        </h2>
+        <p class="section-intro">Explore further professional information and clinical guides from these global health organizations:</p>
+
+        <div class="links-grid">
+          <a href="https://www.mayoclinic.org/diseases-conditions/insomnia/symptoms-causes/syc-20355167" target="_blank" rel="noopener" class="external-link-card">
+            <svg class="icon link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            <strong>Mayo Clinic</strong>
+            <p style="font-size: 0.9rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.6;">Detailed symptoms, diagnosis, and treatments.</p>
+            <span>Visit Website &rarr;</span>
+          </a>
+
+          <a href="https://medlineplus.gov/insomnia.html" target="_blank" rel="noopener" class="external-link-card">
+            <svg class="icon link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            <strong>MedlinePlus (NIH)</strong>
+            <p style="font-size: 0.9rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.6;">Official health information from the U.S. National Library of Medicine.</p>
+            <span>Visit Website &rarr;</span>
+          </a>
+
+          <a href="https://www.sleepfoundation.org/" target="_blank" rel="noopener" class="external-link-card">
+            <svg class="icon link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            <strong>Sleep Foundation</strong>
+            <p style="font-size: 0.9rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.6;">Up-to-date research and sleep hygiene guides.</p>
+            <span>Visit Website &rarr;</span>
+          </a>
+
+          <a href="https://www.cdc.gov/sleep/index.html" target="_blank" rel="noopener" class="external-link-card">
+            <svg class="icon link-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            <strong>CDC Sleep &amp; Sleep Disorders</strong>
+            <p style="font-size: 0.9rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.6;">Public health data, statistics, and impact.</p>
+            <span>Visit Website &rarr;</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="test" class="test-cta reveal">
+        <svg class="cta-art" viewBox="0 0 150 90" aria-hidden="true">
+          <path d="M112 48a24 24 0 1 1-22-38 19 19 0 0 0 22 38Z" fill="#FBF8F3" stroke="#6B8BA4" stroke-width="1.4"/>
+          <path d="M30 20c.4 2.6 1.2 3.4 3.8 3.8-2.6.4-3.4 1.2-3.8 3.8-.4-2.6-1.2-3.4-3.8-3.8 2.6-.4 3.4-1.2 3.8-3.8Z" fill="#6B8BA4"/>
+          <path d="M138 12c.3 2 .9 2.6 2.9 2.9-2 .3-2.6.9-2.9 2.9-.3-2-.9-2.6-2.9-2.9 2-.3 2.6-.9 2.9-2.9Z" fill="#6B8BA4"/>
+          <path class="cloud" d="M48 84h62a14 14 0 0 0 1.6-27.9A20 20 0 0 0 74 54a15 15 0 0 0-25 12 9 9 0 0 0-1 18Z"/>
+        </svg>
+        <div>
+          <h2>Are you at risk of insomnia?</h2>
+          <p>Take this survey to understand your probability of insomnia. You will see your result on a chart, along with its causes, consequences and solutions.</p>
+          <div class="cta-meta">
+            <span>10 questions</span>
+            <span>About 2 minutes</span>
+            <span>Instant results</span>
+          </div>
+        </div>
+        <a class="cta-btn" href="encuesta.html">
+          Take the survey
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </section>
+
+    </main>
+
+    <footer>
+      <svg class="footer-wave" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20 C 240 40 480 0 720 18 S 1200 40 1440 14 V40 H0Z"/></svg>
+      <div class="footer-mark">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>
+        Sleep well tonight
+      </div>
+      <p>Sleep Hygiene Information Portal &copy; 2026. All rights reserved.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    const videoInput = document.getElementById('videoInput');
+    const bgVideo = document.getElementById('bgVideo');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    videoInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const fileURL = URL.createObjectURL(file);
+        bgVideo.src = fileURL;
+        bgVideo.play();
+      }
+    });
+
+    window.addEventListener('scroll', function() {
+      if (reduceMotion) return;
+      const scrollY = window.scrollY;
+      const heroH = window.innerHeight;
+      if (scrollY > heroH * 1.2) return;
+      const fraction = Math.min(scrollY / heroH, 1);
+      const translateY = scrollY * 0.35;
+      const scale = 1.1 - (fraction * 0.05);
+      bgVideo.style.transform = `translateY(${translateY}px) scale(${scale})`;
+    }, { passive: true });
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          if (entry.target.id === 'survey') {
+            animateChart();
+          }
+        }
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach((element) => observer.observe(element));
+
+    function animateChart() {
+      const circumference = 2 * Math.PI * 70;
+
+      const val1 = 5 / 15;
+      const val2 = 4 / 15;
+      const val3 = 6 / 15;
+
+      const slice1 = document.getElementById('slice1');
+      const slice2 = document.getElementById('slice2');
+      const slice3 = document.getElementById('slice3');
+
+      const len1 = circumference * val1;
+      const len2 = circumference * val2;
+      const len3 = circumference * val3;
+
+      slice1.style.strokeDasharray = `${len1} ${circumference - len1}`;
+      slice1.style.strokeDashoffset = 0;
+
+      slice2.style.strokeDasharray = `${len2} ${circumference - len2}`;
+      slice2.style.strokeDashoffset = -len1;
+
+      slice3.style.strokeDasharray = `${len3} ${circumference - len3}`;
+      slice3.style.strokeDashoffset = -(len1 + len2);
+    }
+  </script>
+
+</body>
+</html>

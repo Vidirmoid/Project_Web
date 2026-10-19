@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    /* avoids a flash of English when the visitor already chose Spanish */
+    (function () {
+      try {
+        var p = new URLSearchParams(location.search).get('lang');
+        var s = p || localStorage.getItem('portal-lang');
+        if (s === 'es') {
+          document.documentElement.className += ' i18n-wait';
+          setTimeout(function () { document.documentElement.classList.remove('i18n-wait'); }, 1500);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -190,32 +203,20 @@
     .hero-video-section {
       position: relative;
       width: 100%;
-      min-height: 92vh;
       display: flex;
       align-items: center;
       overflow: hidden;
-      padding: 6rem clamp(1.5rem, 6vw, 5rem) 9rem;
-      background: linear-gradient(165deg, #4A6A83 0%, #6B8BA4 55%, #C9A58E 100%);
-    }
-
-    .bg-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 0;
-      will-change: transform;
-      transform: translateY(0px) scale(1.1);
-      transition: transform 0.1s linear;
-    }
-
-    .video-overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
+      padding: 5.5rem clamp(1.5rem, 6vw, 5rem) 9rem;
       background:
-        linear-gradient(180deg, rgba(47, 58, 69, 0.55) 0%, rgba(74, 106, 131, 0.42) 55%, rgba(201, 165, 142, 0.5) 100%);
+        linear-gradient(180deg, rgba(47, 58, 69, 0.5) 0%, rgba(74, 106, 131, 0.38) 55%, rgba(201, 165, 142, 0.45) 100%),
+        linear-gradient(165deg, #4A6A83 0%, #6B8BA4 55%, #C9A58E 100%);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      max-width: 1100px;
     }
 
     .hero-cloud {
@@ -277,35 +278,191 @@
       max-width: 560px;
     }
 
-    .video-controls-box {
-      display: inline-flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.8rem;
-      background: rgba(251, 248, 243, 0.94);
-      color: var(--ink);
-      padding: 0.6rem 0.6rem 0.6rem 1.3rem;
-      border-radius: 999px;
-      font-size: 0.92rem;
-      box-shadow: var(--shadow);
+    .hero-inner .hero-content { margin-bottom: 3rem; }
+
+    /* ---------- Interview video + gratitude ---------- */
+    .showcase {
+      display: grid;
+      grid-template-columns: clamp(260px, 28vw, 360px) minmax(0, 1fr);
+      gap: clamp(1.5rem, 3vw, 2.5rem);
+      align-items: stretch;
     }
 
-    .custom-file-upload {
-      background: var(--peach);
+    .video-card {
+      position: relative;
+      margin: 0;
+      padding: 12px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow-lift);
+    }
+
+    .video-moon {
+      position: absolute;
+      top: -22px;
+      left: -18px;
+      width: 60px;
+      height: 60px;
+      z-index: 2;
+      pointer-events: none;
+      animation: moonFloat 9s ease-in-out infinite;
+    }
+
+    @keyframes moonFloat {
+      0%, 100% { transform: translateY(0) rotate(-6deg); }
+      50% { transform: translateY(-8px) rotate(0deg); }
+    }
+
+    .video-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-card video {
+      display: block;
+      flex: 1 1 auto;
+      width: 100%;
+      min-height: 480px;
+      object-fit: contain;
+      background: var(--ink);
+      border-radius: 14px;
+    }
+
+    .video-card video:focus-visible {
+      outline: 2px solid var(--blue-ink);
+      outline-offset: 2px;
+    }
+
+    .video-card figcaption {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.98rem;
+      line-height: 1.4;
+      color: var(--muted);
+      text-align: center;
+      padding: 0.85rem 0.5rem 0.35rem;
+    }
+
+    .thanks {
+      position: relative;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: clamp(1.6rem, 3vw, 2.4rem);
+      box-shadow: var(--shadow-lift);
       color: var(--ink);
-      padding: 0.45rem 1.1rem;
-      border-radius: 999px;
-      cursor: pointer;
+      line-height: 1.7;
+    }
+
+    .thanks::before {
+      content: "";
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232, 184, 154, 0.5), transparent 70%);
+      pointer-events: none;
+    }
+
+    .thanks > * { position: relative; }
+
+    .thanks-title {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+
+    .thanks-title em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--peach-ink);
+    }
+
+    .thanks-wave {
+      display: block;
+      width: 140px;
+      height: 14px;
+      margin: 0.7rem 0 1rem;
+      fill: none;
+      stroke: var(--sage);
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .thanks-intro {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 38rem;
+    }
+
+    .thanks-list {
+      list-style: none;
+      margin-top: 1.3rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .thanks-person {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 1rem;
+      padding: 1.1rem 0;
+      border-top: 1px dashed var(--line);
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--peach-ink);
+      background: var(--peach-soft);
+    }
+
+    .thanks-person:nth-child(2) .avatar { background: rgba(157, 181, 160, 0.28); color: var(--sage-ink); }
+    .thanks-person:nth-child(3) .avatar { background: rgba(107, 139, 164, 0.18); color: var(--blue-ink); }
+
+    .person-name {
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .person-role {
+      display: block;
+      margin-top: 0.1rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      transition: background 0.3s ease, transform 0.3s ease;
+      color: var(--blue-ink);
     }
 
-    .custom-file-upload:hover {
-      background: #EFC6AC;
-      transform: translateY(-1px);
+    .person-msg {
+      margin-top: 0.45rem;
+      color: var(--muted);
+      font-size: 0.96rem;
     }
 
-    input[type="file"] { display: none; }
+    .thanks-close {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--ink);
+      padding-top: 1.1rem;
+      border-top: 1px dashed var(--line);
+    }
 
     .hero-wave {
       position: absolute;
@@ -889,7 +1046,11 @@
 
       .main-wrapper { margin-left: 0; width: 100%; }
 
-      .hero-video-section { min-height: 80vh; padding-top: 4rem; }
+      .hero-video-section { padding-top: 4.5rem; }
+
+      .showcase { grid-template-columns: 1fr; }
+      .video-card { width: min(100%, 360px); margin: 0 auto; }
+      .video-card video { flex: none; min-height: 0; aspect-ratio: 9 / 16; max-height: 78vh; }
 
       .intro-grid { grid-template-columns: 1fr; gap: 2rem; }
 
@@ -898,10 +1059,6 @@
     }
 
     @media (max-width: 520px) {
-      .video-controls-box {
-        border-radius: 18px;
-        padding: 0.9rem 1rem;
-      }
       .donut-chart-wrapper { width: 200px; height: 200px; margin: 0 auto; }
       .chart-container { justify-content: center; }
     }
@@ -915,9 +1072,67 @@
       }
       .reveal { opacity: 1; transform: none; }
     }
-  </style>
+  
+    /* ---------- Language toggle ---------- */
+    html.i18n-wait body { visibility: hidden; }
+
+    .lang-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: var(--sans);
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--ink);
+      background: rgba(251, 248, 243, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.6rem 1.15rem 0.6rem 0.95rem;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .lang-toggle svg {
+      width: 18px;
+      height: 18px;
+      flex: none;
+      fill: none;
+      stroke: var(--peach-ink);
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .lang-toggle:hover {
+      background: var(--peach);
+      border-color: var(--peach);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lift);
+    }
+
+    .lang-toggle:focus-visible {
+      outline: 2px solid var(--blue-ink);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 520px) {
+      .lang-toggle { top: 0.7rem; right: 0.7rem; padding: 0.5rem 0.9rem 0.5rem 0.8rem; font-size: 0.85rem; }
+    }
+</style>
 </head>
 <body>
+  <button class="lang-toggle" id="langToggle" type="button" lang="es" data-dyn>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 4 5.7 4 9s-1.4 6.4-4 9c-2.6-2.6-4-5.7-4-9s1.4-6.4 4-9Z"/></svg>
+    <span id="langLabel">Traducir al español</span>
+  </button>
 
   <aside class="sidebar-nav">
     <div class="sidebar-title">
@@ -950,27 +1165,66 @@
   <div class="main-wrapper">
 
     <section id="home" class="hero-video-section">
-      <video id="bgVideo" class="bg-video" autoplay loop muted playsinline>
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-over-a-silent-lake-41559-large.mp4" type="video/mp4">
-        Your browser does not support HTML5 video.
-      </video>
-      <div class="video-overlay"></div>
-
       <svg class="hero-cloud c1" viewBox="0 0 120 50" aria-hidden="true"><path d="M20 46h78a18 18 0 0 0 2-35.9A26 26 0 0 0 52 8a20 20 0 0 0-32 16 11 11 0 0 0 0 22Z"/></svg>
       <svg class="hero-cloud c2" viewBox="0 0 120 50" aria-hidden="true"><path d="M20 46h78a18 18 0 0 0 2-35.9A26 26 0 0 0 52 8a20 20 0 0 0-32 16 11 11 0 0 0 0 22Z"/></svg>
 
-      <div class="hero-content reveal">
-        <span class="eyebrow">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c.6 4 1.9 5.4 6 6-4.1.6-5.4 2-6 6-.6-4-1.9-5.4-6-6 4.1-.6 5.4-2 6-6Z"/></svg>
-          Sleep health guide
-        </span>
-        <h1 class="hero-title">Sleep Disorders <em>&amp;</em> Insomnia</h1>
-        <p class="hero-subtitle">A comprehensive scientific overview of the causes, effects, and sleep hygiene practices for restorative rest.</p>
+      <div class="hero-inner">
+        <div class="hero-content reveal">
+          <span class="eyebrow">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c.6 4 1.9 5.4 6 6-4.1.6-5.4 2-6 6-.6-4-1.9-5.4-6-6 4.1-.6 5.4-2 6-6Z"/></svg>
+            Sleep health guide
+          </span>
+          <h1 class="hero-title">Sleep Disorders <em>&amp;</em> Insomnia</h1>
+          <p class="hero-subtitle">A comprehensive scientific overview of the causes, effects, and sleep hygiene practices for restorative rest.</p>
+        </div>
 
-        <div class="video-controls-box">
-          <span>Want to change the background video?</span>
-          <label for="videoInput" class="custom-file-upload">Upload local video</label>
-          <input type="file" id="videoInput" accept="video/*">
+        <div class="showcase reveal">
+          <figure class="video-card">
+            <svg class="video-moon" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="32" r="30" fill="#FBF8F3" stroke="rgba(107,139,164,0.3)"/>
+              <path d="M44 38A15 15 0 1 1 27 17a12 12 0 0 0 17 21Z" fill="#F4DCCB" stroke="#A9643F" stroke-width="1.4"/>
+            </svg>
+            <video controls playsinline preload="metadata" aria-label="Interview with Professor Salvador" style="width: 100%; height: auto;">
+              <source src="./interview.mp4" type="video/mp4">
+              Your browser does not support HTML5 video
+            </video>
+            <figcaption>Interview with Professor Salvador</figcaption>
+          </figure>
+
+          <aside class="thanks" aria-labelledby="thanksTitle">
+            <h2 class="thanks-title" id="thanksTitle">Our deepest <em>gratitude</em></h2>
+            <svg class="thanks-wave" viewBox="0 0 140 14" aria-hidden="true"><path d="M2 7 C 12 1, 22 1, 32 7 S 52 13, 62 7 S 82 1, 92 7 S 112 13, 138 7"/></svg>
+            <p class="thanks-intro">This interview exists only because three people gave us their time, their talent and their trust. From the bottom of our hearts: thank you, thank you, thank you.</p>
+
+            <ul class="thanks-list">
+              <li class="thanks-person">
+                <span class="avatar" aria-hidden="true">S</span>
+                <div>
+                  <span class="person-name">Salvador</span>
+                  <span class="person-role">Interviewed professor</span>
+                  <p class="person-msg">Thank you for sharing your knowledge, your time and your honesty with so much generosity. Your words are the heart of this project, and we will never be able to thank you enough.</p>
+                </div>
+              </li>
+              <li class="thanks-person">
+                <span class="avatar" aria-hidden="true">M</span>
+                <div>
+                  <span class="person-name">Mariana Paulette Ruiz Hernandez</span>
+                  <span class="person-role">Interviewer</span>
+                  <p class="person-msg">Thank you for guiding the conversation with such care, curiosity and courage. Every question you asked opened a door, and we are endlessly grateful.</p>
+                </div>
+              </li>
+              <li class="thanks-person">
+                <span class="avatar" aria-hidden="true">J</span>
+                <div>
+                  <span class="person-name">Juan Pablo Montoya Diaz</span>
+                  <span class="person-role">Cameraman</span>
+                  <p class="person-msg">Thank you for capturing every moment with patience and talent. Thanks to your eye behind the lens, this story can be seen, and we are infinitely thankful.</p>
+                </div>
+              </li>
+            </ul>
+
+            <p class="thanks-close">You are the light in this project. Thank you, always.</p>
+          </aside>
         </div>
       </div>
 
@@ -1192,30 +1446,214 @@
   </div>
 
   <script>
-    const videoInput = document.getElementById('videoInput');
-    const bgVideo = document.getElementById('bgVideo');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    /* ---------- Translation engine (English by default, Spanish on demand) ---------- */
+    (function () {
+      var STORE_KEY = 'portal-lang';
+      var ES = {
+  "Information Portal: Insomnia & Sleep Health": "Portal informativo: Insomnio y salud del sueño",
+  "Docs Index": "Índice",
+  "Home": "Inicio",
+  "Overview": "Resumen",
+  "Causes": "Causas",
+  "Symptoms": "Síntomas",
+  "Survey Data": "Datos de la encuesta",
+  "Medical Resources": "Recursos médicos",
+  "Insomnia Test": "Test de insomnio",
+  "Rest is a skill, not a luxury.": "Descansar es una habilidad, no un lujo.",
+  "Sleep health guide": "Guía de salud del sueño",
+  "Sleep Disorders": "Trastornos del sueño",
+  "Insomnia": "Insomnio",
+  "A comprehensive scientific overview of the causes, effects, and sleep hygiene practices for restorative rest.": "Un panorama científico completo de las causas, los efectos y las prácticas de higiene del sueño para lograr un descanso reparador.",
+  "Interview with Professor Salvador": "Entrevista con el profesor Salvador",
+  "Your browser does not support HTML5 video.": "Tu navegador no admite video HTML5.",
+  "Our deepest": "Nuestra más profunda",
+  "gratitude": "gratitud",
+  "This interview exists only because three people gave us their time, their talent and their trust. From the bottom of our hearts: thank you, thank you, thank you.": "Esta entrevista existe solo porque tres personas nos regalaron su tiempo, su talento y su confianza. Desde el fondo de nuestro corazón: gracias, gracias, gracias.",
+  "Interviewed professor": "Profesor entrevistado",
+  "Interviewer": "Entrevistadora",
+  "Cameraman": "Camarógrafo",
+  "Thank you for sharing your knowledge, your time and your honesty with so much generosity. Your words are the heart of this project, and we will never be able to thank you enough.": "Gracias por compartir tu conocimiento, tu tiempo y tu sinceridad con tanta generosidad. Tus palabras son el corazón de este proyecto y jamás podremos agradecerte lo suficiente.",
+  "Thank you for guiding the conversation with such care, curiosity and courage. Every question you asked opened a door, and we are endlessly grateful.": "Gracias por guiar la conversación con tanto cuidado, curiosidad y valentía. Cada pregunta que hiciste abrió una puerta, y te estamos infinitamente agradecidos.",
+  "Thank you for capturing every moment with patience and talent. Thanks to your eye behind the lens, this story can be seen, and we are infinitely thankful.": "Gracias por capturar cada momento con paciencia y talento. Gracias a tu mirada detrás de la lente, esta historia puede verse, y te lo agradecemos infinitamente.",
+  "You are the light in this project. Thank you, always.": "Ustedes son la luz de este proyecto. Gracias, siempre.",
+  "What is Insomnia?": "¿Qué es el insomnio?",
+  "Insomnia is a common sleep disorder that can make it hard to fall asleep, hard to stay asleep, or cause you to wake up too early and not be able to get back to sleep. It can drain your energy level and drastically affect your mood, health, and performance at work or school.": "El insomnio es un trastorno del sueño común que puede dificultar quedarte dormido, mantenerte dormido, o hacer que te despiertes demasiado temprano y no puedas volver a dormir. Puede agotar tu energía y afectar drásticamente tu estado de ánimo, tu salud y tu rendimiento en el trabajo o la escuela.",
+  "Survey highlight": "Dato destacado de la encuesta",
+  "in": "de",
+  "people in our survey group of 15 reported living with chronic insomnia.": "personas de nuestro grupo de 15 encuestados reportaron vivir con insomnio crónico.",
+  "Common Causes": "Causas comunes",
+  "Habitual causes of chronic insomnia include:": "Las causas habituales del insomnio crónico incluyen:",
+  "Stress:": "Estrés:",
+  "Concerns about work, school, health, or finances.": "Preocupaciones por el trabajo, la escuela, la salud o las finanzas.",
+  "Poor Sleep Habits:": "Malos hábitos de sueño:",
+  "Irregular schedules, screen usage right before bed.": "Horarios irregulares y uso de pantallas justo antes de dormir.",
+  "Travel or Work Schedules:": "Viajes u horarios de trabajo:",
+  "Disruptions to your circadian rhythm.": "Alteraciones de tu ritmo circadiano.",
+  "Substance Use:": "Consumo de sustancias:",
+  "Caffeine, nicotine, or alcohol late in the day.": "Cafeína, nicotina o alcohol al final del día.",
+  "Frequent Symptoms": "Síntomas frecuentes",
+  "People suffering from insomnia may experience:": "Las personas con insomnio pueden experimentar:",
+  "Difficulty falling asleep at night.": "Dificultad para conciliar el sueño por la noche.",
+  "Waking up during the night or waking up too early.": "Despertarse durante la noche o demasiado temprano.",
+  "Not feeling well-rested after a night's sleep.": "No sentirse descansado después de dormir.",
+  "Daytime tiredness, sleepiness, irritability, or anxiety.": "Cansancio, somnolencia, irritabilidad o ansiedad durante el día.",
+  "Types of Insomnia": "Tipos de insomnio",
+  "It is mainly categorized based on its duration:": "Se clasifica principalmente según su duración:",
+  "Acute (Short-term):": "Agudo (corto plazo):",
+  "Lasts for days or weeks, often caused by stress or traumatic events.": "Dura días o semanas y suele deberse al estrés o a eventos traumáticos.",
+  "Chronic:": "Crónico:",
+  "Occurs at least 3 nights a week for 3 months or longer without a direct apparent medical cause.": "Ocurre al menos 3 noches por semana durante 3 meses o más, sin una causa médica aparente directa.",
+  "Field Survey Results": "Resultados de la encuesta de campo",
+  "Statistical breakdown gathered from a study group sample of 15 individuals regarding their current sleep conditions:": "Desglose estadístico obtenido de una muestra de 15 personas sobre sus condiciones actuales de sueño:",
+  "Donut chart: 5 chronic insomnia, 4 developing symptoms, 6 no symptoms": "Gráfica de dona: 5 con insomnio crónico, 4 con síntomas en desarrollo, 6 sin síntomas",
+  "People": "Personas",
+  "5 People (33.3%):": "5 personas (33.3%):",
+  "Suffers Chronic Insomnia": "Sufre insomnio crónico",
+  "4 People (26.7%):": "4 personas (26.7%):",
+  "Developing Symptoms": "Síntomas en desarrollo",
+  "6 People (40.0%):": "6 personas (40.0%):",
+  "No Insomnia Symptoms": "Sin síntomas de insomnio",
+  "Top 3 Key Insights from Interviews": "Las 3 ideas clave de las entrevistas",
+  "I spend at least two hours in bed scrolling on my phone before trying to sleep, which makes my mind race.": "Paso al menos dos horas en la cama deslizando en mi celular antes de intentar dormir, y eso acelera mi mente.",
+  "— Top Response #1 (Pre-sleep screen exposure)": "— Respuesta principal n.º 1 (Exposición a pantallas antes de dormir)",
+  "Academic and work deadlines keep me up thinking about everything I have to do tomorrow morning.": "Las fechas límite de la escuela y del trabajo me mantienen despierto pensando en todo lo que tengo que hacer mañana temprano.",
+  "— Top Response #2 (Stress and anticipatory anxiety)": "— Respuesta principal n.º 2 (Estrés y ansiedad anticipatoria)",
+  "I drink coffee or energy drinks late in the afternoon to finish my daily tasks, but then I can't turn off.": "Tomo café o bebidas energéticas a última hora de la tarde para terminar mis tareas, pero luego no puedo desconectarme.",
+  "— Top Response #3 (Late-day stimulant intake)": "— Respuesta principal n.º 3 (Consumo de estimulantes al final del día)",
+  "Medical Sources & Useful Links": "Fuentes médicas y enlaces útiles",
+  "Explore further professional information and clinical guides from these global health organizations:": "Explora más información profesional y guías clínicas de estas organizaciones de salud mundiales:",
+  "Detailed symptoms, diagnosis, and treatments.": "Síntomas, diagnóstico y tratamientos detallados.",
+  "Visit Website →": "Visitar sitio web →",
+  "Official health information from the U.S. National Library of Medicine.": "Información oficial de salud de la Biblioteca Nacional de Medicina de EE. UU.",
+  "Up-to-date research and sleep hygiene guides.": "Investigaciones actualizadas y guías de higiene del sueño.",
+  "CDC Sleep & Sleep Disorders": "CDC: Sueño y trastornos del sueño",
+  "Public health data, statistics, and impact.": "Datos de salud pública, estadísticas e impacto.",
+  "Are you at risk of insomnia?": "¿Tienes riesgo de insomnio?",
+  "Take this survey to understand your probability of insomnia. You will see your result on a chart, along with its causes, consequences and solutions.": "Responde esta encuesta para conocer tu probabilidad de tener insomnio. Verás tu resultado en una gráfica, junto con sus causas, consecuencias y soluciones.",
+  "10 questions": "10 preguntas",
+  "About 2 minutes": "Unos 2 minutos",
+  "Instant results": "Resultados al instante",
+  "Take the survey": "Hacer la encuesta",
+  "Sleep well tonight": "Que duermas bien esta noche",
+  "Sleep Hygiene Information Portal © 2026. All rights reserved.": "Portal informativo de higiene del sueño © 2026. Todos los derechos reservados."
+};
+      var hooks = [];
+      var textOrig = new WeakMap();
+      var titleOrig = document.title;
 
-    videoInput.addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const fileURL = URL.createObjectURL(file);
-        bgVideo.src = fileURL;
-        bgVideo.play();
+      function norm(s) { return s.replace(/\s+/g, ' ').trim(); }
+
+      function initialLang() {
+        try {
+          var p = new URLSearchParams(location.search).get('lang');
+          if (p === 'es' || p === 'en') return p;
+        } catch (e) {}
+        try {
+          var s = localStorage.getItem(STORE_KEY);
+          if (s === 'es' || s === 'en') return s;
+        } catch (e) {}
+        return 'en';
       }
-    });
 
-    window.addEventListener('scroll', function() {
-      if (reduceMotion) return;
-      const scrollY = window.scrollY;
-      const heroH = window.innerHeight;
-      if (scrollY > heroH * 1.2) return;
-      const fraction = Math.min(scrollY / heroH, 1);
-      const translateY = scrollY * 0.35;
-      const scale = 1.1 - (fraction * 0.05);
-      bgVideo.style.transform = `translateY(${translateY}px) scale(${scale})`;
-    }, { passive: true });
+      var lang = initialLang();
 
+      function translateTextNodes(l) {
+        var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+          acceptNode: function (n) {
+            if (!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+            var p = n.parentElement;
+            if (!p || p.closest('script, style, [data-dyn], [data-i18n]')) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        var nodes = [], n;
+        while ((n = walker.nextNode())) nodes.push(n);
+        nodes.forEach(function (node) {
+          if (!textOrig.has(node)) textOrig.set(node, node.nodeValue);
+          var orig = textOrig.get(node);
+          var key = norm(orig);
+          if (l === 'es' && ES[key] !== undefined) {
+            node.nodeValue = orig.match(/^\s*/)[0] + ES[key] + orig.match(/\s*$/)[0];
+          } else {
+            node.nodeValue = orig;
+          }
+        });
+      }
+
+      function translateAttributes(l) {
+        document.querySelectorAll('[aria-label], [alt]').forEach(function (el) {
+          ['aria-label', 'alt'].forEach(function (a) {
+            if (!el.hasAttribute(a)) return;
+            var store = 'data-en-' + a;
+            if (!el.hasAttribute(store)) el.setAttribute(store, el.getAttribute(a));
+            var orig = el.getAttribute(store);
+            var key = norm(orig);
+            el.setAttribute(a, l === 'es' && ES[key] !== undefined ? ES[key] : orig);
+          });
+        });
+      }
+
+      function translateBlocks(l) {
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          if (!el.hasAttribute('data-en-html')) el.setAttribute('data-en-html', el.innerHTML);
+          var key = el.getAttribute('data-i18n');
+          el.innerHTML = l === 'es' && ES[key] !== undefined ? ES[key] : el.getAttribute('data-en-html');
+        });
+      }
+
+      function carryLangInLinks(l) {
+        document.querySelectorAll('a[href]').forEach(function (a) {
+          var h0 = a.getAttribute('data-href0') || a.getAttribute('href');
+          if (!/^(index|menu|encuesta)\.html/.test(h0)) return;
+          a.setAttribute('data-href0', h0);
+          var m = h0.match(/^([^#?]*)(#.*)?$/);
+          a.setAttribute('href', l === 'es' ? m[1] + '?lang=es' + (m[2] || '') : h0);
+        });
+      }
+
+      function apply(l) {
+        document.documentElement.lang = l;
+        var key = norm(titleOrig);
+        document.title = l === 'es' && ES[key] !== undefined ? ES[key] : titleOrig;
+        translateTextNodes(l);
+        translateAttributes(l);
+        translateBlocks(l);
+        carryLangInLinks(l);
+
+        var btn = document.getElementById('langToggle');
+        document.getElementById('langLabel').textContent = l === 'es' ? 'Volver al inglés' : 'Traducir al español';
+        btn.setAttribute('lang', 'es');
+        btn.setAttribute('aria-pressed', l === 'es' ? 'true' : 'false');
+        document.documentElement.classList.remove('i18n-wait');
+      }
+
+      function setLang(l) {
+        lang = l;
+        try { localStorage.setItem(STORE_KEY, l); } catch (e) {}
+        try {
+          var url = new URL(location.href);
+          if (l === 'es') url.searchParams.set('lang', 'es'); else url.searchParams.delete('lang');
+          history.replaceState(null, '', url);
+        } catch (e) {}
+        apply(l);
+        hooks.forEach(function (fn) { fn(l); });
+      }
+
+      window.I18N = {
+        get lang() { return lang; },
+        onChange: function (fn) { hooks.push(fn); },
+        set: setLang
+      };
+
+      document.getElementById('langToggle').addEventListener('click', function () {
+        setLang(lang === 'es' ? 'en' : 'es');
+      });
+
+      apply(lang);
+    })();
+  </script>
+
+  <script>
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
